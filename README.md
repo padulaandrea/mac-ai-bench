@@ -12,6 +12,8 @@ Open **Terminal** and paste:
 curl -sL https://raw.githubusercontent.com/padulaandrea/mac-ai-bench/main/macbench.sh | sh
 ```
 
+Or, from a copy of this folder (for example via AirDrop): `sh ~/Downloads/mac-ai-bench/macbench.sh`
+
 At the end it asks whether to upload the results. Say yes, and send the link it prints.
 
 - Needs an Apple Silicon Mac, **about 65 GB free**, and a fast connection: it downloads about **57 GB** of models

@@ -2,6 +2,7 @@
 # mac-ai-bench: run a real local AI video studio flow on this Mac and time it.
 #
 #   curl -sL https://raw.githubusercontent.com/padulaandrea/mac-ai-bench/main/macbench.sh | sh
+#   sh /path/to/mac-ai-bench/macbench.sh        (from a copied folder, e.g. AirDrop)
 #
 # Installs a temporary Python, the two exact tools (mlx-gen 0.38.0, ltx-2-mlx 0.18.0) and the two real models
 # (FLUX.2-klein-4B, LTX-2.5 8-bit: about 57 GB of downloads) into ONE temporary folder, runs five real jobs
@@ -25,7 +26,9 @@ curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="$D/bin" UV_NO_M
 export UV_CACHE_DIR="$D/cache" UV_PYTHON_INSTALL_DIR="$D/python"
 UV="$D/bin/uv"
 echo "2/4 Benchmark kit..."
-if [ -n "$MACBENCH_KIT" ]; then cp -R "$MACBENCH_KIT" "$D/kit"; else
+HERE=$(cd "$(dirname "$0")" 2>/dev/null && pwd)
+[ -z "$MACBENCH_KIT" ] && [ -f "$HERE/flow/jobs.json" ] && MACBENCH_KIT="$HERE"   # run from a copied folder
+if [ -n "$MACBENCH_KIT" ]; then mkdir "$D/kit"; cp -R "$MACBENCH_KIT/flow" "$D/kit/flow"; else
   mkdir "$D/kit"; curl -LsSf https://codeload.github.com/padulaandrea/mac-ai-bench/tar.gz/main | tar xz -C "$D/kit" --strip-components 1
 fi
 echo "3/4 The studio's tools (exact versions)..."
