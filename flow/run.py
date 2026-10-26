@@ -138,17 +138,16 @@ def upload(res: dict, path: Path):
             want = "1"
     if want != "1":
         return None
-    import requests
-    try:
-        r = requests.post(UPLOAD, data={"content": json.dumps(res, indent=1), "syntax": "json", "expiry_days": 365,
-                                        "title": f"mac-ai-bench {res['machine']['chip']} {res['machine']['gpu_cores']}-core "
-                                                 f"{res['machine']['memory_gb']} GB"},
-                          headers={"User-Agent": "mac-ai-bench"}, timeout=30)
-        r.raise_for_status()
-        return r.text.strip()
-    except Exception as e:
-        print(f"Upload failed ({e}). The results are printed above and saved in {path}.")
-        return None
+    title = (f"mac-ai-bench {res['machine']['chip']} {res['machine']['gpu_cores']}-core "
+             f"{res['machine']['memory_gb']} GB")
+    # the Mac's own curl (system certificates): Python's bundled ones reject dpaste.com's certificate chain
+    r = subprocess.run(["/usr/bin/curl", "-sS", "--fail", "-m", "30", "-A", "mac-ai-bench", "-F", f"content=<{path}",
+                        "-F", "syntax=json", "-F", "expiry_days=365", "-F", f"title={title}", UPLOAD],
+                       capture_output=True, text=True)
+    if r.returncode == 0 and r.stdout.strip().startswith("https://"):
+        return r.stdout.strip()
+    print(f"Upload failed ({(r.stderr or r.stdout).strip()[:200]}). The results are printed above and saved in {path}.")
+    return None
 
 
 def main():

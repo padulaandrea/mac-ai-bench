@@ -1,6 +1,6 @@
 {
  "benchmark": "mac-ai-bench studio flow",
- "date": "2026-10-26 15:23",
+ "date": "2026-10-26 15:51",
  "machine": {
   "chip": "Apple M5 Pro",
   "model": "Mac17,9",
@@ -20,56 +20,56 @@
  "download": "(models already on this Mac)",
  "jobs": {
   "picture": {
-   "seconds": 42.4,
+   "seconds": 40.1,
    "ok": true,
-   "peak_memory_gb": 25.3,
-   "system_memory_peak_gb": 35.6,
+   "peak_memory_gb": 25.4,
+   "system_memory_peak_gb": 37.4,
    "swap_grew_gb": 0.0,
    "difference_from_studio": 0.0
   },
   "composed_scene": {
-   "seconds": 52.3,
+   "seconds": 52.7,
    "ok": true,
-   "peak_memory_gb": 25.9,
-   "system_memory_peak_gb": 34.7,
+   "peak_memory_gb": 25.7,
+   "system_memory_peak_gb": 35.6,
    "swap_grew_gb": 0.0,
    "difference_from_studio": 0.0
   },
   "composed_repaint": {
-   "seconds": 20.3,
+   "seconds": 18.9,
    "ok": true,
-   "peak_memory_gb": 32.1,
-   "system_memory_peak_gb": 39.5,
-   "swap_grew_gb": 2.23,
+   "peak_memory_gb": 32.3,
+   "system_memory_peak_gb": 38.5,
+   "swap_grew_gb": 1.99,
    "difference_from_studio": 0.0
   },
   "video": {
-   "seconds": 161.6,
+   "seconds": 159.0,
    "ok": true,
-   "peak_memory_gb": 20.9,
-   "system_memory_peak_gb": 28.3,
+   "peak_memory_gb": 20.8,
+   "system_memory_peak_gb": 29.3,
    "swap_grew_gb": 0.0,
    "difference_from_studio": 1.1
   },
   "lipsync_video": {
-   "seconds": 168.9,
+   "seconds": 163.2,
    "ok": true,
    "peak_memory_gb": 20.9,
-   "system_memory_peak_gb": 31.5,
+   "system_memory_peak_gb": 30.9,
    "swap_grew_gb": 0.0,
    "difference_from_studio": 1.2
   }
  },
  "summary": {
-  "start_picture_s": 42.4,
-  "composed_picture_s": 72.6,
-  "video_per_clip_second_s": 32.1,
-  "video_5s_shot_min": 2.67,
-  "video_100s_total_min": 53.4,
-  "lipsync_video_s": 168.9,
-  "all_jobs_min": 7.4,
+  "start_picture_s": 40.1,
+  "composed_picture_s": 71.6,
+  "video_per_clip_second_s": 31.5,
+  "video_5s_shot_min": 2.63,
+  "video_100s_total_min": 52.6,
+  "lipsync_video_s": 163.2,
+  "all_jobs_min": 7.2,
   "download_min": null,
   "download_gb": 56.8
  },
- "note": "Reference run: same script, studio M5 Pro; lip-sync job re-run separately after a file-list fix."
+ "note": "Reference run: the published script (curl from GitHub), studio M5 Pro, models already downloaded. Uploaded: https://dpaste.com/69XAT7P4Q"
 }

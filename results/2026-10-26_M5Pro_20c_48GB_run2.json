@@ -1,0 +1,75 @@
+{
+ "benchmark": "mac-ai-bench studio flow",
+ "date": "2026-10-26 15:51",
+ "machine": {
+  "chip": "Apple M5 Pro",
+  "model": "Mac17,9",
+  "gpu_cores": "20",
+  "memory_gb": 48,
+  "cpu_cores": "18",
+  "macos": "26.6"
+ },
+ "versions": {
+  "mlx-gen": "0.38.0",
+  "ltx-2-mlx": "0.18.0",
+  "models": {
+   "black-forest-labs/FLUX.2-klein-4B": "e7b7dc27f91d",
+   "dgrauet/ltx-2.5-mlx-q8": "746ca9aacb69"
+  }
+ },
+ "download": "(models already on this Mac)",
+ "jobs": {
+  "picture": {
+   "seconds": 40.1,
+   "ok": true,
+   "peak_memory_gb": 25.4,
+   "system_memory_peak_gb": 37.4,
+   "swap_grew_gb": 0.0,
+   "difference_from_studio": 0.0
+  },
+  "composed_scene": {
+   "seconds": 52.7,
+   "ok": true,
+   "peak_memory_gb": 25.7,
+   "system_memory_peak_gb": 35.6,
+   "swap_grew_gb": 0.0,
+   "difference_from_studio": 0.0
+  },
+  "composed_repaint": {
+   "seconds": 18.9,
+   "ok": true,
+   "peak_memory_gb": 32.3,
+   "system_memory_peak_gb": 38.5,
+   "swap_grew_gb": 1.99,
+   "difference_from_studio": 0.0
+  },
+  "video": {
+   "seconds": 159.0,
+   "ok": true,
+   "peak_memory_gb": 20.8,
+   "system_memory_peak_gb": 29.3,
+   "swap_grew_gb": 0.0,
+   "difference_from_studio": 1.1
+  },
+  "lipsync_video": {
+   "seconds": 163.2,
+   "ok": true,
+   "peak_memory_gb": 20.9,
+   "system_memory_peak_gb": 30.9,
+   "swap_grew_gb": 0.0,
+   "difference_from_studio": 1.2
+  }
+ },
+ "summary": {
+  "start_picture_s": 40.1,
+  "composed_picture_s": 71.6,
+  "video_per_clip_second_s": 31.5,
+  "video_5s_shot_min": 2.63,
+  "video_100s_total_min": 52.6,
+  "lipsync_video_s": 163.2,
+  "all_jobs_min": 7.2,
+  "download_min": null,
+  "download_gb": 56.8
+ },
+ "note": "Reference run: the published script (curl from GitHub), studio M5 Pro, models already downloaded. Uploaded: https://dpaste.com/69XAT7P4Q"
+}
