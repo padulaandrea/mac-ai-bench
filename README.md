@@ -12,6 +12,12 @@ Open **Terminal** and paste:
 curl -sL https://raw.githubusercontent.com/padulaandrea/mac-ai-bench/main/macbench.sh | sh
 ```
 
+On a slow connection, pictures only (15 GB download instead of 57 GB; the three picture jobs):
+
+```sh
+curl -sL https://raw.githubusercontent.com/padulaandrea/mac-ai-bench/main/macbench.sh | sh -s pictures
+```
+
 Or, from a copy of this folder (for example via AirDrop): `sh ~/Downloads/mac-ai-bench/macbench.sh`
 
 At the end it asks whether to upload the results. Say yes, and send the link it prints.

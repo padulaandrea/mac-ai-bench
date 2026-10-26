@@ -63,13 +63,15 @@ class Sampler(threading.Thread):
             self.samples.append(memory()); time.sleep(2)
 
 
-def download(hf_home: Path) -> dict:
+def download(hf_home: Path, video: bool = True) -> dict:
     """Fetch the pinned model files (skips what is already there). Returns size and speed."""
     os.environ["HF_HOME"] = str(hf_home)
     os.environ.setdefault("HF_XET_HIGH_PERFORMANCE", "1")
     from huggingface_hub import snapshot_download
     out = {}
     for repo, rev, patterns in MODELS:
+        if not video and "ltx" in repo:
+            continue
         print(f"  {repo} ...", flush=True)
         t = time.time()
         path = Path(snapshot_download(repo, revision=rev, allow_patterns=patterns))
@@ -167,7 +169,8 @@ def main():
                         "models": {r: rev[:12] for r, rev, _ in MODELS}}}
     print("Machine:", json.dumps(res["machine"]), flush=True)
     print("\nDownloading the two models (only the files the studio uses)...", flush=True)
-    res["download"] = download(a.hf_home)
+    video = any(j["tool"] == "ltx-2-mlx" for j in jobs if not a.only or j["name"] in a.only)
+    res["download"] = download(a.hf_home, video)
     import static_ffmpeg
     static_ffmpeg.add_paths()      # the video tool writes its mp4 through ffmpeg, as in the studio
     res["jobs"] = {}
