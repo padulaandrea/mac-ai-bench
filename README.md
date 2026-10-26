@@ -19,7 +19,10 @@ At the end it asks whether to upload the results. Say yes, and send the link it 
 - Needs an Apple Silicon Mac, **about 65 GB free**, and a fast connection: it downloads about **57 GB** of models
   (FLUX.2-klein-4B 15 GB, LTX-2.5 8-bit 42 GB). On fast Wi-Fi (~50 MB/s) that is about 20 minutes; the jobs then take
   about 8 minutes on an M5 Pro.
-- Installs nothing permanently: Python, the tools and the models go into one temporary folder, deleted at the end.
+- Installs nothing permanently: Python, the tools, the models and the studio's pictures go into one temporary folder,
+  deleted at the end (also on Ctrl-C or when the Terminal window is closed). If a run is ever cut off (crash,
+  force-quit), this removes any leftovers and says what it deleted:
+  `curl -sL https://raw.githubusercontent.com/padulaandrea/mac-ai-bench/main/cleanup.sh | sh`
 - The upload (optional) goes to [dpaste.com](https://dpaste.com) with no account, kept for a year and unlisted:
   only the Mac model, memory, macOS version, download speed and timings. No names, no serial numbers, no files.
 
