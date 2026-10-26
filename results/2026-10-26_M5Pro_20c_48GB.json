@@ -66,7 +66,10 @@
   "video_per_clip_second_s": 32.1,
   "video_5s_shot_min": 2.67,
   "video_100s_total_min": 53.4,
-  "lipsync_video_s": 168.9
+  "lipsync_video_s": 168.9,
+  "all_jobs_min": 7.4,
+  "download_min": null,
+  "download_gb": 56.8
  },
  "note": "Reference run: same script, studio M5 Pro; lip-sync job re-run separately after a file-list fix."
 }

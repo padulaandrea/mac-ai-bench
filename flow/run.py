@@ -192,6 +192,10 @@ def main():
                           "video_100s_total_min": round(per_s * 100 / 60, 1)}
         if j.get("lipsync_video", {}).get("ok"):
             res["summary"]["lipsync_video_s"] = j["lipsync_video"]["seconds"]
+    res.setdefault("summary", {}).update({
+        "all_jobs_min": round(sum(r["seconds"] for r in j.values()) / 60, 1),
+        "download_min": round(sum(d["seconds"] for d in res["download"].values()) / 60, 1),
+        "download_gb": round(sum(d["gb"] for d in res["download"].values()), 1)})
     if ref:
         res["reference"] = {"machine": ref["machine"], "summary": ref.get("summary")}
     path = a.work / "results.json"
