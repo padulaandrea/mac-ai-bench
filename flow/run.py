@@ -27,7 +27,13 @@ MODELS = [   # repo, revision the studio uses, files the studio's flow reads
       "vocoder.safetensors", "audio_vae.safetensors", "duration_head.safetensors"]),
 ]
 UPLOAD = "https://dpaste.com/api/v2/"
+MACHINE_TAG = "this Mac"
 NOTIFY = "https://ntfy.sh/mac-ai-bench-padulaandrea-results"   # the result link is also posted here (kept 12 hours)
+
+
+def notify(text: str, title: str = "mac-ai-bench progress"):
+    """Post a short progress line to the results channel, so an unattended run can be followed from elsewhere."""
+    subprocess.run(["/usr/bin/curl", "-sS", "-m", "15", "-H", f"Title: {title}", "-d", text, NOTIFY], capture_output=True)
 
 
 def sh(*a) -> str:
@@ -75,7 +81,15 @@ def download(hf_home: Path, video: bool = True) -> dict:
             continue
         print(f"  {repo} ...", flush=True)
         t = time.time()
-        path = Path(snapshot_download(repo, revision=rev, allow_patterns=patterns))
+        for attempt in range(1, 31):   # slow or flaky Wi-Fi: retry, keeping the files and parts already fetched
+            try:
+                path = Path(snapshot_download(repo, revision=rev, allow_patterns=patterns))
+                break
+            except Exception as e:
+                print(f"    download interrupted ({str(e)[:120]}); retry {attempt}/30 in 60 s", flush=True)
+                if attempt == 30:
+                    raise
+                time.sleep(60)
         # the tools ask for the repo by name (revision "main") and run offline: point "main" at the pinned revision
         ref = hf_home / "hub" / ("models--" + repo.replace("/", "--")) / "refs/main"
         ref.parent.mkdir(parents=True, exist_ok=True); ref.write_text(rev)
@@ -83,6 +97,7 @@ def download(hf_home: Path, video: bool = True) -> dict:
         sec = time.time() - t
         out[repo] = {"gb": round(gb, 1), "seconds": round(sec), "mb_per_s": round(gb * 1024 / max(sec, 1))}
         print(f"    {gb:.1f} GB in {sec / 60:.1f} min", flush=True)
+        notify(f"{MACHINE_TAG}: downloaded {repo} ({gb:.1f} GB in {sec / 60:.0f} min, {out[repo]['mb_per_s']} MB/s)")
     return out
 
 
@@ -174,6 +189,10 @@ def main():
            "versions": {"mlx-gen": "0.38.0", "ltx-2-mlx": "0.18.0",
                         "models": {r: rev[:12] for r, rev, _ in MODELS}}}
     print("Machine:", json.dumps(res["machine"]), flush=True)
+    global MACHINE_TAG
+    m = res["machine"]
+    MACHINE_TAG = f"{m['chip']} {m['gpu_cores']}-core {m['memory_gb']} GB"
+    notify(f"{MACHINE_TAG}: started ({'all jobs' if not a.only else ', '.join(a.only)}), downloading the models")
     print("\nDownloading the two models (only the files the studio uses)...", flush=True)
     video = any(j["tool"] == "ltx-2-mlx" for j in jobs if not a.only or j["name"] in a.only)
     res["download"] = download(a.hf_home, video)
@@ -185,6 +204,7 @@ def main():
             continue
         print(f"\n{job['name']}: {job['what']} ...", flush=True)
         r = res["jobs"][job["name"]] = run_job(job, a, a.work)
+        notify(f"{MACHINE_TAG}: {job['name']} {'done in ' + str(r['seconds']) + ' s' if r['ok'] else 'FAILED'}")
         base = (ref or {}).get("jobs", {}).get(job["name"], {}).get("seconds")
         if base and r["ok"]:
             r["speed_vs_reference"] = round(base / r["seconds"], 2)
@@ -228,4 +248,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        notify(f"{MACHINE_TAG}: the run stopped with an error: {str(e)[:300]}", "mac-ai-bench FAILED")
+        raise

@@ -22,7 +22,9 @@ Or, from a copy of this folder (for example via AirDrop): `sh ~/Downloads/mac-ai
 
 It can run unattended. At the end it asks whether to upload the results and, with no answer within 30 seconds,
 uploads them; the result link is also posted to the channel https://ntfy.sh/mac-ai-bench-padulaandrea-results
-(kept 12 hours) so it can be picked up without going back to the Mac, and saved on the Desktop for good.
+(kept 12 hours) so it can be picked up without going back to the Mac, and saved on the Desktop for good. Progress
+(started, each model downloaded, each job, failures, a closed window) is posted there too. Downloads retry on a
+flaky connection, and the Mac is kept awake for the whole run.
 
 - Needs an Apple Silicon Mac, **about 65 GB free**, and a fast connection: it downloads about **57 GB** of models
   (FLUX.2-klein-4B 15 GB, LTX-2.5 8-bit 42 GB). On fast Wi-Fi (~50 MB/s) that is about 20 minutes; the jobs then take

@@ -19,7 +19,13 @@ fi
 case "$(uname -m)" in arm64) ;; *) echo "This needs an Apple Silicon Mac (M1 or later)."; exit 1;; esac
 LTX_COMMIT=14a3ddd6054736beb45b4d836135fa4d44490531   # ltx-2-mlx 0.18.0, as installed in the studio
 D=$(mktemp -d "${TMPDIR:-/tmp}/macbench.XXXXXX")
-if [ "${MACBENCH_KEEP:-0}" = 1 ]; then echo "Keeping $D"; else trap 'rm -rf "$D"' EXIT INT TERM HUP; fi
+NOTIFY=https://ntfy.sh/mac-ai-bench-padulaandrea-results
+stopped() { STAGE=stopped; curl -sS -m 10 -H "Title: mac-ai-bench STOPPED" -d "A run was stopped before the end (window closed, Ctrl-C or shutdown)." "$NOTIFY" >/dev/null 2>&1; exit 1; }
+STAGE=setup
+setup_failed() { [ "$1" != 0 ] && [ "$STAGE" = setup ] && curl -sS -m 10 -H "Title: mac-ai-bench FAILED" \
+  -d "Setup failed on $(sysctl -n machdep.cpu.brand_string) (before the downloads: not enough disk space, or installing the tools failed)." "$NOTIFY" >/dev/null 2>&1; true; }
+if [ "${MACBENCH_KEEP:-0}" = 1 ]; then echo "Keeping $D"; trap stopped INT TERM HUP; else
+  trap 'rc=$?; setup_failed $rc; rm -rf "$D"' EXIT; trap 'rm -rf "$D"; stopped' INT TERM HUP; fi
 HF="${MACBENCH_HF_HOME:-$D/hf}"
 if [ -z "$MACBENCH_HF_HOME" ]; then
   FREE=$(df -g "$D" | awk 'NR==2 {print $4}')
@@ -44,7 +50,8 @@ mkdir "$D/ltx"; curl -LsSf "https://codeload.github.com/dgrauet/ltx-2-mlx/tar.gz
 fi
 "$UV" venv --quiet --python 3.12 "$D/pic"
 "$UV" pip install --quiet --python "$D/pic/bin/python" -r "$D/kit/flow/requirements-picture.txt"
-echo "4/4 Models and jobs..."
-"$D/pic/bin/python" -u "$D/kit/flow/run.py" --kit "$D/kit/flow" --work "$D/work" --hf-home "$HF" \
+echo "4/4 Models and jobs (progress is also posted to $NOTIFY)..."
+STAGE=run
+/usr/bin/caffeinate -i -s "$D/pic/bin/python" -u "$D/kit/flow/run.py" --kit "$D/kit/flow" --work "$D/work" --hf-home "$HF" \
   --mlxgen "$D/pic/bin/mlxgen" --ltx "$D/ltx/.venv/bin/ltx-2-mlx" "$@"
 echo "Done. Temporary files are being deleted. (If a run was ever interrupted, clean-up.sh removes any leftovers.)"
