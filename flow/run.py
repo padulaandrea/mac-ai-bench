@@ -214,10 +214,17 @@ def main():
               f"{ref['machine']['memory_gb']} GB): " + json.dumps(ref.get("summary")))
     link = upload(res, path)
     if link:
+        res["link"] = link
         print(f"\nResults uploaded: {link}\nClaude can also find this link by itself (it is posted to the results channel).")
-    keep = Path(os.environ.get("MACBENCH_SAVE", "")) if os.environ.get("MACBENCH_SAVE") else None
-    if keep:
-        keep.mkdir(parents=True, exist_ok=True); shutil.copy2(path, keep / f"results_{time.strftime('%Y%m%d-%H%M%S')}.json")
+    # a copy on the Desktop (link included), so the results outlive the 12-hour channel; MACBENCH_SAVE picks another folder
+    keep = Path(os.environ.get("MACBENCH_SAVE") or Path.home() / "Desktop")
+    try:
+        keep.mkdir(parents=True, exist_ok=True)
+        saved = keep / f"mac-ai-bench-results-{time.strftime('%Y%m%d-%H%M')}.json"
+        saved.write_text(json.dumps(res, indent=1))
+        print(f"Saved a copy: {saved}")
+    except OSError as e:
+        print(f"Could not save a copy ({e}).")
 
 
 if __name__ == "__main__":

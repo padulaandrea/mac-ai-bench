@@ -22,11 +22,12 @@ Or, from a copy of this folder (for example via AirDrop): `sh ~/Downloads/mac-ai
 
 It can run unattended. At the end it asks whether to upload the results and, with no answer within 30 seconds,
 uploads them; the result link is also posted to the channel https://ntfy.sh/mac-ai-bench-padulaandrea-results
-(kept 12 hours) so it can be picked up without going back to the Mac.
+(kept 12 hours) so it can be picked up without going back to the Mac, and saved on the Desktop for good.
 
 - Needs an Apple Silicon Mac, **about 65 GB free**, and a fast connection: it downloads about **57 GB** of models
   (FLUX.2-klein-4B 15 GB, LTX-2.5 8-bit 42 GB). On fast Wi-Fi (~50 MB/s) that is about 20 minutes; the jobs then take
   about 8 minutes on an M5 Pro.
+- Leaves only one small file: the results (with their link) on the Desktop, `mac-ai-bench-results-<date>.json`.
 - Installs nothing permanently: Python, the tools, the models and the studio's pictures go into one temporary folder,
   deleted at the end (also on Ctrl-C or when the Terminal window is closed). If a run is ever cut off (crash,
   force-quit), this removes any leftovers and says what it deleted:
