@@ -27,6 +27,7 @@ MODELS = [   # repo, revision the studio uses, files the studio's flow reads
       "vocoder.safetensors", "audio_vae.safetensors", "duration_head.safetensors"]),
 ]
 UPLOAD = "https://dpaste.com/api/v2/"
+NOTIFY = "https://ntfy.sh/mac-ai-bench-padulaandrea-results"   # the result link is also posted here (kept 12 hours)
 
 
 def sh(*a) -> str:
@@ -130,12 +131,14 @@ def run_job(job: dict, a, work: Path) -> dict:
 
 def upload(res: dict, path: Path):
     want = os.environ.get("MACBENCH_UPLOAD")
-    if want is None:
+    if want is None:      # ask, but upload anyway after 30 s so an unattended run still reports
+        import select
         try:
             with open("/dev/tty") as tty:
                 print("\nUpload these results to dpaste.com (no account; only the numbers above: Mac model, memory, "
-                      "macOS version, timings) so they can be shared by link? [Y/n] ", end="", flush=True)
-                want = "0" if tty.readline().strip().lower().startswith("n") else "1"
+                      "macOS version, timings) so they can be shared by link? [Y/n] (yes in 30 s) ", end="", flush=True)
+                ready, _, _ = select.select([tty], [], [], 30)
+                want = "0" if ready and tty.readline().strip().lower().startswith("n") else "1"
         except OSError:
             want = "1"
     if want != "1":
@@ -147,7 +150,10 @@ def upload(res: dict, path: Path):
                         "-F", "syntax=json", "-F", "expiry_days=365", "-F", f"title={title}", UPLOAD],
                        capture_output=True, text=True)
     if r.returncode == 0 and r.stdout.strip().startswith("https://"):
-        return r.stdout.strip()
+        link = r.stdout.strip()
+        subprocess.run(["/usr/bin/curl", "-sS", "-m", "15", "-H", f"Title: {title}", "-d", link, NOTIFY],
+                       capture_output=True)
+        return link
     print(f"Upload failed ({(r.stderr or r.stdout).strip()[:200]}). The results are printed above and saved in {path}.")
     return None
 
@@ -208,7 +214,7 @@ def main():
               f"{ref['machine']['memory_gb']} GB): " + json.dumps(ref.get("summary")))
     link = upload(res, path)
     if link:
-        print(f"\nResults uploaded: {link}\nSend this link to Claude to add it to the results table.")
+        print(f"\nResults uploaded: {link}\nClaude can also find this link by itself (it is posted to the results channel).")
     keep = Path(os.environ.get("MACBENCH_SAVE", "")) if os.environ.get("MACBENCH_SAVE") else None
     if keep:
         keep.mkdir(parents=True, exist_ok=True); shutil.copy2(path, keep / f"results_{time.strftime('%Y%m%d-%H%M%S')}.json")

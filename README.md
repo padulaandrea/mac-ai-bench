@@ -20,7 +20,9 @@ curl -sL https://raw.githubusercontent.com/padulaandrea/mac-ai-bench/main/macben
 
 Or, from a copy of this folder (for example via AirDrop): `sh ~/Downloads/mac-ai-bench/macbench.sh`
 
-At the end it asks whether to upload the results. Say yes, and send the link it prints.
+It can run unattended. At the end it asks whether to upload the results and, with no answer within 30 seconds,
+uploads them; the result link is also posted to the channel https://ntfy.sh/mac-ai-bench-padulaandrea-results
+(kept 12 hours) so it can be picked up without going back to the Mac.
 
 - Needs an Apple Silicon Mac, **about 65 GB free**, and a fast connection: it downloads about **57 GB** of models
   (FLUX.2-klein-4B 15 GB, LTX-2.5 8-bit 42 GB). On fast Wi-Fi (~50 MB/s) that is about 20 minutes; the jobs then take
@@ -29,7 +31,7 @@ At the end it asks whether to upload the results. Say yes, and send the link it 
   deleted at the end (also on Ctrl-C or when the Terminal window is closed). If a run is ever cut off (crash,
   force-quit), this removes any leftovers and says what it deleted:
   `curl -sL https://raw.githubusercontent.com/padulaandrea/mac-ai-bench/main/cleanup.sh | sh`
-- The upload (optional) goes to [dpaste.com](https://dpaste.com) with no account, kept for a year and unlisted:
+- The upload (answer n to skip) goes to [dpaste.com](https://dpaste.com) with no account, kept for a year and unlisted:
   only the Mac model, memory, macOS version, download speed and timings. No names, no serial numbers, no files.
 
 ## What it runs
