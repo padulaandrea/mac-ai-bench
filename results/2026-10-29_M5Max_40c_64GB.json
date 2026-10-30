@@ -1,0 +1,101 @@
+{
+ "benchmark": "mac-ai-bench studio flow",
+ "date": "2026-10-29 23:16",
+ "machine": {
+  "chip": "Apple M5 Max",
+  "model": "Mac17,14",
+  "gpu_cores": "40",
+  "memory_gb": 64,
+  "cpu_cores": "18",
+  "macos": "27.0"
+ },
+ "versions": {
+  "mlx-gen": "0.38.0",
+  "ltx-2-mlx": "0.18.0",
+  "models": {
+   "black-forest-labs/FLUX.2-klein-4B": "e7b7dc27f91d",
+   "dgrauet/ltx-2.5-mlx-q8": "746ca9aacb69"
+  }
+ },
+ "download": "(models already on this Mac)",
+ "jobs": {
+  "picture": {
+   "seconds": 22.3,
+   "ok": true,
+   "peak_memory_gb": 27.3,
+   "system_memory_peak_gb": 38.5,
+   "swap_grew_gb": 0.0,
+   "difference_from_studio": 0.0,
+   "speed_vs_reference": 1.8
+  },
+  "composed_scene": {
+   "seconds": 24.5,
+   "ok": true,
+   "peak_memory_gb": 27.0,
+   "system_memory_peak_gb": 38.9,
+   "swap_grew_gb": 0.0,
+   "difference_from_studio": 0.0,
+   "speed_vs_reference": 2.15
+  },
+  "composed_repaint": {
+   "seconds": 11.2,
+   "ok": true,
+   "peak_memory_gb": 34.3,
+   "system_memory_peak_gb": 40.4,
+   "swap_grew_gb": 0.0,
+   "difference_from_studio": 0.0,
+   "speed_vs_reference": 1.69
+  },
+  "video": {
+   "seconds": 90.6,
+   "ok": true,
+   "peak_memory_gb": 21.2,
+   "system_memory_peak_gb": 32.4,
+   "swap_grew_gb": 0.0,
+   "difference_from_studio": 1.7,
+   "speed_vs_reference": 1.75
+  },
+  "lipsync_video": {
+   "seconds": 94.2,
+   "ok": true,
+   "peak_memory_gb": 21.2,
+   "system_memory_peak_gb": 39.9,
+   "swap_grew_gb": 0.0,
+   "difference_from_studio": 2.0,
+   "speed_vs_reference": 1.73
+  }
+ },
+ "summary": {
+  "start_picture_s": 22.3,
+  "composed_picture_s": 35.7,
+  "video_per_clip_second_s": 18.0,
+  "video_5s_shot_min": 1.5,
+  "video_100s_total_min": 30.0,
+  "lipsync_video_s": 94.2,
+  "all_jobs_min": 4.0,
+  "download_min": null,
+  "download_gb": null
+ },
+ "reference": {
+  "machine": {
+   "chip": "Apple M5 Pro",
+   "model": "Mac17,9",
+   "gpu_cores": "20",
+   "memory_gb": 48,
+   "cpu_cores": "18",
+   "macos": "26.6"
+  },
+  "summary": {
+   "start_picture_s": 40.1,
+   "composed_picture_s": 71.6,
+   "video_per_clip_second_s": 31.5,
+   "video_5s_shot_min": 2.63,
+   "video_100s_total_min": 52.6,
+   "lipsync_video_s": 163.2,
+   "all_jobs_min": 7.2,
+   "download_min": null,
+   "download_gb": 56.8
+  }
+ },
+ "note": "M5 Max run: this repo run from a clone (with the plain-HTTPS download fix), models already downloaded, same settings as the M5 Pro reference (low-RAM video). Not uploaded."
+}

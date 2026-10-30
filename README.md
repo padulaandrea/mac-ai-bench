@@ -63,9 +63,11 @@ Each run's full numbers are in [`results/`](results).
 |---|---|---|---|---|---|
 | M5 Pro, 20-core GPU, 48 GB (reference, 2026-10-26, run 2) | 40 s | 72 s | 2.7 min | 2.7 min | (already there) |
 | M5 Pro, 20-core GPU, 48 GB (run 1) | 42 s | 73 s | 2.7 min | 2.8 min | (already there) |
+| M5 Max, 40-core GPU, 64 GB (2026-10-29) | 22 s | 36 s | 1.5 min | 1.6 min | (already there) |
 
 On the reference Mac the pictures came out pixel-identical to the studio's approved ones (difference 0.0) and the
-videos nearly identical (1.1 and 1.2 out of 255).
+videos nearly identical (1.1 and 1.2 out of 255). The M5 Max did all five jobs in 4.0 min (M5 Pro 7.2), 1.7-2.2x faster, with the same pictures (0.0)
+and nearly the same videos (1.7 and 2.0).
 
 ## Quick check (no model download)
 

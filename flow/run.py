@@ -73,7 +73,11 @@ class Sampler(threading.Thread):
 def download(hf_home: Path, video: bool = True) -> dict:
     """Fetch the pinned model files (skips what is already there). Returns size and speed."""
     os.environ["HF_HOME"] = str(hf_home)
-    os.environ.setdefault("HF_XET_HIGH_PERFORMANCE", "1")
+    # plain HTTPS: Xet stalled at 0 bytes with no error (Apple Store; M5 Max 2026-10-29), so the retries never ran;
+    # a 30 s timeout turns a stalled connection into an error that is retried
+    os.environ.setdefault("HF_HUB_DISABLE_XET", "1")
+    os.environ.setdefault("HF_HUB_DOWNLOAD_TIMEOUT", "30")
+    os.environ.setdefault("HF_HUB_ETAG_TIMEOUT", "30")
     from huggingface_hub import snapshot_download
     out = {}
     for repo, rev, patterns in MODELS:
